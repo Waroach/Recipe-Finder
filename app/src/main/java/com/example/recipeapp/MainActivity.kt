@@ -2,6 +2,7 @@ package com.example.recipeapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+// need to import this manually maybe?
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
