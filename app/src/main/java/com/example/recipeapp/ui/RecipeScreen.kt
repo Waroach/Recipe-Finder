@@ -29,6 +29,15 @@ fun SearchBarUI() {
                 .fillMaxWidth()
                 .padding(16.dp)
         )
+        Button(
+            onClick = {
+                // For now, just re-display the hardcoded recipe
+                displayedRecipe = SampleData.hardcodedRecipe
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text("Random Recipe")
+        }
         // Display recipe details if available
         displayedRecipe?.let { recipe ->
             Column(modifier = Modifier.padding(16.dp)) { // Add padding around details
