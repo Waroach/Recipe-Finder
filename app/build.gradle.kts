@@ -54,5 +54,8 @@ dependencies {
     implementation(libs.androidx.ui) // Use the latest version available
     implementation(libs.androidx.material) // Use the latest version available
     implementation(libs.ui.tooling.preview) // Use the latest version available
-    implementation(libs.androidx.compose.material3)
+    // implementation(libs.androidx.compose.material3)
+    // implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose.v190)
 }
