@@ -1,5 +1,8 @@
 package com.example.recipeapp.ui
 
+/**
+ * Data class representing a recipe.
+ */
 data class Recipe(
     val id: String,
     val name: String,
