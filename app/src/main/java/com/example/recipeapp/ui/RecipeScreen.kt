@@ -16,9 +16,7 @@ import com.example.recipeapp.ui.SampleData
 @Composable
 fun SearchBarUI() {
     var searchText by remember { mutableStateOf("") } // State for the search text
-    var displayedRecipe by remember { mutableStateOf<Recipe?>(null) } // State for the currently displayed recipe
-
-    displayedRecipe = SampleData.hardcodedRecipe // Initially display the hardcoded recipe
+    var displayedRecipe by remember { mutableStateOf<Recipe?>(SampleData.hardcodedRecipe) } // Initially display the hardcoded recipe
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -27,8 +25,22 @@ fun SearchBarUI() {
     ) {
         TextField(
             value = searchText,
-            onValueChange = { searchText = it }, // Update search text on input
-            label = { Text("Search for a recipe") },modifier = Modifier
+            onValueChange = { newText ->
+                searchText = newText
+                // Filter the recipe based on search text
+                displayedRecipe = if (newText.isBlank()) {
+                    SampleData.hardcodedRecipe // Show hardcoded recipe if search is blank
+                } else {
+                    // Check if recipe name contains search text (case-insensitive)
+                    if (SampleData.hardcodedRecipe.name.contains(newText, ignoreCase = true)) {
+                        SampleData.hardcodedRecipe
+                    } else {
+                        null // Hide recipe if no match
+                    }
+                }
+            },
+            label = { Text("Search for a recipe") },
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         )
