@@ -51,11 +51,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.androidx.ui) // Use the latest version available
-    implementation(libs.androidx.material) // Use the latest version available
-    implementation(libs.ui.tooling.preview) // Use the latest version available
-    // implementation(libs.androidx.compose.material3)
-    // implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.activity.compose.v190)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson) // For JSON parsing with Gson
 }
