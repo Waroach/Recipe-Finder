@@ -1,12 +1,19 @@
 package com.example.recipeapp.ui
 
 import android.util.Log
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
+import coil.compose.AsyncImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,23 +54,31 @@ fun SearchBarUI() {
  * Composable function to display the recipe details.
  */@Composable
 fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
-    key?.let { // Only apply the key if it's not null
-        key(it) { // Use the key function to apply the key
-            recipe?.let {
-                Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Recipe: ${it.name}", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
-    } ?: run { // If key is null, don't apply it
+    // Apply the key if it's not null, otherwise don't apply it
+    key(key) {
         recipe?.let {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = "Recipe: ${it.name}", style = MaterialTheme.typography.headlineSmall)
                 Spacer(modifier = Modifier.height(8.dp))
+                AsyncImage(
+                    model = it.mealThumb,
+                    contentDescription ="Recipe Image",
+                    modifier = Modifier.fillMaxWidth()
+                )
+//                TODO Get a working youtube link
+//                Text(
+//                    text = "Watch on YouTube",
+//                    style = MaterialTheme.typography.bodyMedium,
+//                    color = Color.Blue, // Or your preferred link color
+//                    modifier = Modifier.clickable {
+//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtube))
+//                        startActivity(LocalContext.current, intent, null) // Launch external intent
+//                    }
+//                )
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
-            }}
+            }
+        }
     }
 }
 
@@ -89,7 +104,7 @@ fun RandomRecipeButton(coroutineScope: CoroutineScope, onRandomRecipeClick: susp
  */
 suspend fun fetchRandomRecipe(): Recipe? {
     return withContext(Dispatchers.IO) {
-        Log.d("fetchRandomRecipe", "Did I fetch?")
+        Log.d("fetchRandomRecipe", "Did I fetch Random?")
         val mealApiService = createMealApiService()
 
         try {
@@ -148,6 +163,7 @@ fun SearchButton(coroutineScope: CoroutineScope, onSearchClick: suspend (String)
  */
 suspend fun fetchRecipesBySearch(query: String): Recipe? {
     return withContext(Dispatchers.IO) {
+        Log.d("fetchRandomRecipe", "Did I fetch Search?")
         val mealApiService = createMealApiService()
 
         try {
