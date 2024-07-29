@@ -52,9 +52,11 @@ fun SearchBarUI() {
 
 /**
  * Composable function to display the recipe details.
- */@Composable
+ */
+@Composable
 fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
     // Apply the key if it's not null, otherwise don't apply it
+    val context = LocalContext.current
     key(key) {
         recipe?.let {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -66,15 +68,15 @@ fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
                     modifier = Modifier.fillMaxWidth()
                 )
 //                TODO Get a working youtube link
-//                Text(
-//                    text = "Watch on YouTube",
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    color = Color.Blue, // Or your preferred link color
-//                    modifier = Modifier.clickable {
-//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtube))
-//                        startActivity(LocalContext.current, intent, null) // Launch external intent
-//                    }
-//                )
+                Text(
+                    text ="Watch on YouTube",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Blue, // Or your preferred link color
+                    modifier = Modifier.clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtube))
+                        startActivity(context, intent, null) // Use the stored context
+                    }
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
             }
