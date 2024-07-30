@@ -1,12 +1,19 @@
 package com.example.recipeapp.ui
 
 import android.util.Log
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
+import coil.compose.AsyncImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +28,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBarUI() {
-    var searchText by remember { mutableStateOf("") } // State for the search text
     var displayedRecipe by remember { mutableStateOf<Recipe?>(null) } // Initially no recipe displayed
     val coroutineScope = rememberCoroutineScope()
 
@@ -30,41 +36,74 @@ fun SearchBarUI() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DisplayedRecipe(recipe = displayedRecipe, key = displayedRecipe?.id)
+        SearchButton(coroutineScope) { query ->
+            val searchResult = fetchRecipesBySearch(query)
+            displayedRecipe = searchResult
+        }
 
         RandomRecipeButton(coroutineScope) {
             val randomRecipe = fetchRandomRecipe()
             displayedRecipe = randomRecipe
         }
 
-        SearchButton(coroutineScope) { query ->
-            val searchResult = fetchRecipesBySearch(query)
-            displayedRecipe = searchResult
-        }
+        DisplayedRecipe(recipe = displayedRecipe, key = displayedRecipe?.id)
     }
 }
 
 /**
  * Composable function to display the recipe details.
- */@Composable
+ */
+@Composable
 fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
-    key?.let { // Only apply the key if it's not null
-        key(it) { // Use the key function to apply the key
-            recipe?.let {
-                Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Recipe: ${it.name}", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
-    } ?: run { // If key is null, don't apply it
+    // Apply the key if it's not null, otherwise don't apply it
+    val context = LocalContext.current
+    key(key) {
         recipe?.let {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = "Recipe: ${it.name}", style = MaterialTheme.typography.headlineSmall)
                 Spacer(modifier = Modifier.height(8.dp))
+                AsyncImage(
+                    model = it.mealThumb,
+                    contentDescription ="Recipe Image",
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text ="Watch on YouTube",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Blue, // Or your preferred link color
+                    modifier = Modifier.clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtube))
+                        startActivity(context, intent, null) // Use the stored context
+                    }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
-            }}
+                // This will be the ingredients
+                // todo Need to remove the of if there is no ingredient
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = "- ${it.measure1} of ${it.ingredient1}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure2} of ${it.ingredient2}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure3} of ${it.ingredient3}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure4} of ${it.ingredient4}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure5} of ${it.ingredient5}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure6} of ${it.ingredient6}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure7} of ${it.ingredient7}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure8} of ${it.ingredient8}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure9} of ${it.ingredient9}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure10} of ${it.ingredient10}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure11} of ${it.ingredient11}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure12} of ${it.ingredient12}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure13} of ${it.ingredient13}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure14} of ${it.ingredient14}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure15} of ${it.ingredient15}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure16} of ${it.ingredient16}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure17} of ${it.ingredient17}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure18} of ${it.ingredient18}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure19} of ${it.ingredient19}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "- ${it.measure20} of ${it.ingredient20}", style = MaterialTheme.typography.bodyMedium)
+
+            }
+        }
     }
 }
 
@@ -90,13 +129,8 @@ fun RandomRecipeButton(coroutineScope: CoroutineScope, onRandomRecipeClick: susp
  */
 suspend fun fetchRandomRecipe(): Recipe? {
     return withContext(Dispatchers.IO) {
-        Log.d("fetchRandomRecipe", "Did I fetch?")
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.themealdb.com/api/json/v1/1/") // Base URL of the API
-            .addConverterFactory(GsonConverterFactory.create()) // Use Gson for JSON parsing
-            .build()
-
-        val mealApiService = retrofit.create(MealApiService::class.java)
+        Log.d("fetchRandomRecipe", "Did I fetch Random?")
+        val mealApiService = createMealApiService()
 
         try {
             val response = mealApiService.getRandomRecipe().execute()
@@ -106,54 +140,7 @@ suspend fun fetchRandomRecipe(): Recipe? {
                 val meal = recipeResponse?.meals?.firstOrNull()
                 if (meal != null) {
                     Log.d("RecipeApp", "Fetched Recipe Name: $meal.strMeal") // Log fetched recipe
-                    Recipe(id = meal.idMeal,
-                        name = meal.strMeal,
-                        instructions = meal.strInstructions,
-                        mealThumb = meal.strMealThumb,
-                        youtube = meal.strYoutube,
-                        ingredient1 = meal.strIngredient1,
-                        ingredient2 = meal.strIngredient2,
-                        ingredient3 = meal.strIngredient3,
-                        ingredient4 = meal.strIngredient4,
-                        ingredient5 = meal.strIngredient5,
-                        ingredient6 = meal.strIngredient6,
-                        ingredient7 = meal.strIngredient7,
-                        ingredient8 = meal.strIngredient8,
-                        ingredient9 = meal.strIngredient9,
-                        ingredient10 = meal.strIngredient10,
-                        ingredient11 = meal.strIngredient11,
-                        ingredient12 = meal.strIngredient12,
-                        ingredient13 = meal.strIngredient13,
-                        ingredient14 = meal.strIngredient14,
-                        ingredient15 = meal.strIngredient15,
-                        ingredient16 = meal.strIngredient16,
-                        ingredient17 = meal.strIngredient17,
-                        ingredient18 = meal.strIngredient18,
-                        ingredient19 = meal.strIngredient19,
-                        ingredient20 = meal.strIngredient20,
-                        measure1 = meal.strMeasure1,
-                        measure2 = meal.strMeasure2,
-                        measure3 = meal.strMeasure3,
-                        measure4 = meal.strMeasure4,
-                        measure5 = meal.strMeasure5,
-                        measure6 = meal.strMeasure6,
-                        measure7 = meal.strMeasure7,
-                        measure8 = meal.strMeasure8,
-                        measure9 = meal.strMeasure9,
-                        measure10 = meal.strMeasure10,
-                        measure11 = meal.strMeasure11,
-                        measure12 = meal.strMeasure12,
-                        measure13 = meal.strMeasure13,
-                        measure14 = meal.strMeasure14,
-                        measure15 = meal.strMeasure15,
-                        measure16 = meal.strMeasure16,
-                        measure17 = meal.strMeasure17,
-                        measure18 = meal.strMeasure18,
-                        measure19 = meal.strMeasure19,
-                        measure20 = meal.strMeasure20,
-                        source = meal.strSource,
-                        // Map other fields as needed
-                    )
+                    createRecipeFromMeal(meal)
                 } else {
                     null
                 }
@@ -201,12 +188,8 @@ fun SearchButton(coroutineScope: CoroutineScope, onSearchClick: suspend (String)
  */
 suspend fun fetchRecipesBySearch(query: String): Recipe? {
     return withContext(Dispatchers.IO) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.themealdb.com/api/json/v1/1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val mealApiService = retrofit.create(MealApiService::class.java)
+        Log.d("fetchRandomRecipe", "Did I fetch Search?")
+        val mealApiService = createMealApiService()
 
         try {
             val response = mealApiService.searchRecipes(query).execute()
@@ -216,54 +199,7 @@ suspend fun fetchRecipesBySearch(query: String): Recipe? {
                 val meal = recipeResponse.meals.randomOrNull() // Select a random meal from the list
                 if (meal != null) {
                     Log.d("RecipeApp", "Fetched Recipe Name: ${meal.strMeal}")
-                    Recipe(id = meal.idMeal,
-                        name = meal.strMeal,
-                        instructions = meal.strInstructions,
-                        mealThumb = meal.strMealThumb,
-                        youtube = meal.strYoutube,
-                        ingredient1 = meal.strIngredient1,
-                        ingredient2 = meal.strIngredient2,
-                        ingredient3 = meal.strIngredient3,
-                        ingredient4 = meal.strIngredient4,
-                        ingredient5 = meal.strIngredient5,
-                        ingredient6 = meal.strIngredient6,
-                        ingredient7 = meal.strIngredient7,
-                        ingredient8 = meal.strIngredient8,
-                        ingredient9 = meal.strIngredient9,
-                        ingredient10 = meal.strIngredient10,
-                        ingredient11 = meal.strIngredient11,
-                        ingredient12 = meal.strIngredient12,
-                        ingredient13 = meal.strIngredient13,
-                        ingredient14 = meal.strIngredient14,
-                        ingredient15 = meal.strIngredient15,
-                        ingredient16 = meal.strIngredient16,
-                        ingredient17 = meal.strIngredient17,
-                        ingredient18 = meal.strIngredient18,
-                        ingredient19 = meal.strIngredient19,
-                        ingredient20 = meal.strIngredient20,
-                        measure1 = meal.strMeasure1,
-                        measure2 = meal.strMeasure2,
-                        measure3 = meal.strMeasure3,
-                        measure4 = meal.strMeasure4,
-                        measure5 = meal.strMeasure5,
-                        measure6 = meal.strMeasure6,
-                        measure7 = meal.strMeasure7,
-                        measure8 = meal.strMeasure8,
-                        measure9 = meal.strMeasure9,
-                        measure10 = meal.strMeasure10,
-                        measure11 = meal.strMeasure11,
-                        measure12 = meal.strMeasure12,
-                        measure13 = meal.strMeasure13,
-                        measure14 = meal.strMeasure14,
-                        measure15 = meal.strMeasure15,
-                        measure16 = meal.strMeasure16,
-                        measure17 = meal.strMeasure17,
-                        measure18 = meal.strMeasure18,
-                        measure19 = meal.strMeasure19,
-                        measure20 = meal.strMeasure20,
-                        source = meal.strSource,
-                        // Map other fields as needed
-                    )
+                    createRecipeFromMeal(meal)
                 } else {
                     null // No matching recipes found
                 }
@@ -279,18 +215,69 @@ suspend fun fetchRecipesBySearch(query: String): Recipe? {
 }
 
 /**
- * Filters the recipe based on the search text.
+ * Function that sets up and returns the MealApiService instance
  */
-private fun filterRecipe(searchText: String, displayedRecipe: Recipe?): Recipe? {
-    return if (searchText.isBlank()) {
-        null
-    } else {
-        displayedRecipe?.let { fetchedRecipe ->
-            if (fetchedRecipe.name.contains(searchText, ignoreCase = true)) {
-                fetchedRecipe
-            } else {
-                null
-            }
-        }
+private fun createMealApiService(): MealApiService {
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://www.themealdb.com/api/json/v1/1/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    return retrofit.create(MealApiService::class.java)
+}
+
+/**
+ * Function representing a recipe / meal
+ */
+private fun createRecipeFromMeal(meal: Meal?):Recipe? {
+    return meal?.let {
+        Recipe(
+            id = it.idMeal,
+            name = it.strMeal,
+            instructions = it.strInstructions,
+            mealThumb = it.strMealThumb,
+            youtube = it.strYoutube,
+            ingredient1 = it.strIngredient1,
+            ingredient2 = it.strIngredient2,
+            ingredient3 = it.strIngredient3,
+            ingredient4 = it.strIngredient4,
+            ingredient5 = it.strIngredient5,
+            ingredient6 = it.strIngredient6,
+            ingredient7 = it.strIngredient7,
+            ingredient8 = it.strIngredient8,
+            ingredient9 = it.strIngredient9,
+            ingredient10 = it.strIngredient10,
+            ingredient11 = it.strIngredient11,
+            ingredient12 = it.strIngredient12,
+            ingredient13 = it.strIngredient13,
+            ingredient14 = it.strIngredient14,
+            ingredient15 = it.strIngredient15,
+            ingredient16 = it.strIngredient16,
+            ingredient17 = it.strIngredient17,
+            ingredient18 = it.strIngredient18,
+            ingredient19 = it.strIngredient19,
+            ingredient20 = it.strIngredient20,
+            measure1 = it.strMeasure1,
+            measure2 = it.strMeasure2,
+            measure3 = it.strMeasure3,
+            measure4 = it.strMeasure4,
+            measure5 = it.strMeasure5,
+            measure6 = it.strMeasure6,
+            measure7 = it.strMeasure7,
+            measure8 = it.strMeasure8,
+            measure9 = it.strMeasure9,
+            measure10 = it.strMeasure10,
+            measure11 = it.strMeasure11,
+            measure12 = it.strMeasure12,
+            measure13 = it.strMeasure13,
+            measure14 = it.strMeasure14,
+            measure15 = it.strMeasure15,
+            measure16 = it.strMeasure16,
+            measure17 = it.strMeasure17,
+            measure18 = it.strMeasure18,
+            measure19 = it.strMeasure19,
+            measure20 = it.strMeasure20,
+            source = it.strSource,
+        )
     }
 }

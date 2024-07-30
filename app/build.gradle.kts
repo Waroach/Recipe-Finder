@@ -58,4 +58,5 @@ dependencies {
     implementation(libs.androidx.activity.compose.v190)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson) // For JSON parsing with Gson
+    implementation(libs.coil.compose)
 }
