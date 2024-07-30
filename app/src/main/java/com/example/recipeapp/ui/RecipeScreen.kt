@@ -79,29 +79,67 @@ fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
                 // This will be the ingredients
-                // todo Need to remove the of if there is no ingredient
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "- ${it.measure1} of ${it.ingredient1}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure2} of ${it.ingredient2}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure3} of ${it.ingredient3}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure4} of ${it.ingredient4}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure5} of ${it.ingredient5}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure6} of ${it.ingredient6}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure7} of ${it.ingredient7}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure8} of ${it.ingredient8}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure9} of ${it.ingredient9}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure10} of ${it.ingredient10}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure11} of ${it.ingredient11}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure12} of ${it.ingredient12}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure13} of ${it.ingredient13}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure14} of ${it.ingredient14}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure15} of ${it.ingredient15}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure16} of ${it.ingredient16}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure17} of ${it.ingredient17}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure18} of ${it.ingredient18}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure19} of ${it.ingredient19}", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "- ${it.measure20} of ${it.ingredient20}", style = MaterialTheme.typography.bodyMedium)
-
+                if (it.ingredient1?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure1} of ${it.ingredient1}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient2?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure2} of ${it.ingredient2}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient3?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure3} of ${it.ingredient3}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient4?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure4} of ${it.ingredient4}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient5?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure5} of ${it.ingredient5}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient6?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure6} of ${it.ingredient6}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient7?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure7} of ${it.ingredient7}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient8?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure8} of ${it.ingredient8}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient9?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure9} of ${it.ingredient9}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient10?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure10} of ${it.ingredient10}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient11?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure11} of ${it.ingredient11}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient12?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure12} of ${it.ingredient12}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient13?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure13} of ${it.ingredient13}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient14?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure14} of ${it.ingredient14}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient15?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure15} of ${it.ingredient15}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient16?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure16} of ${it.ingredient16}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient17?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure17} of ${it.ingredient17}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient18?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure18} of ${it.ingredient18}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient19?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure19} of ${it.ingredient19}", style = MaterialTheme.typography.bodyMedium)
+                }
+                if (it.ingredient20?.isNotBlank() == true) {
+                    Text(text = "- ${it.measure20} of ${it.ingredient20}", style = MaterialTheme.typography.bodyMedium)
+                }
             }
         }
     }
