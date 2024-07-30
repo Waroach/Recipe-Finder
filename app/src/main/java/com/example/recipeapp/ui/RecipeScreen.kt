@@ -79,6 +79,7 @@ fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
                 // This will be the ingredients
+                // todo Need to remove the of if there is no ingredient
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = "- ${it.measure1} of ${it.ingredient1}", style = MaterialTheme.typography.bodyMedium)
                 Text(text = "- ${it.measure2} of ${it.ingredient2}", style = MaterialTheme.typography.bodyMedium)
