@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -57,90 +59,188 @@ fun SearchBarUI() {
 fun DisplayedRecipe(recipe: Recipe?, key: String? = null) {
     // Apply the key if it's not null, otherwise don't apply it
     val context = LocalContext.current
+    val jumpToIngredients = remember { mutableStateOf(false) } // State for jump target
+    val lazyListState = rememberLazyListState() // Remember the scroll statekey(key)
+
     key(key) {
         recipe?.let {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "Recipe: ${it.name}", style = MaterialTheme.typography.headlineSmall)
-                Spacer(modifier = Modifier.height(8.dp))
-                AsyncImage(
-                    model = it.mealThumb,
-                    contentDescription ="Recipe Image",
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Text(
-                    text ="Watch on YouTube",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Blue, // Or your preferred link color
-                    modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtube))
-                        startActivity(context, intent, null) // Use the stored context
+            LazyColumn(modifier = Modifier.padding(16.dp), state = lazyListState) {
+                // Recipe Name
+                item {
+                    Button(onClick = { jumpToIngredients.value = true }) {
+                        Text("Jump to Ingredients")
                     }
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
-                // This will be the ingredients
-                Spacer(modifier = Modifier.height(8.dp))
-                if (it.ingredient1?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure1} of ${it.ingredient1}", style = MaterialTheme.typography.bodyMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Recipe: ${it.name}", style = MaterialTheme.typography.headlineSmall)
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
-                if (it.ingredient2?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure2} of ${it.ingredient2}", style = MaterialTheme.typography.bodyMedium)
+
+                // Display the image
+                item {
+                    AsyncImage(
+                        model = it.mealThumb,
+                        contentDescription = "Recipe Image",
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
-                if (it.ingredient3?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure3} of ${it.ingredient3}", style = MaterialTheme.typography.bodyMedium)
+
+                // Youtube link
+                item {
+                    Text(
+                        text = "Watch on YouTube",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Blue,
+                        modifier = Modifier.clickable {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it.youtube))
+                            startActivity(context, intent, null)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
-                if (it.ingredient4?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure4} of ${it.ingredient4}", style = MaterialTheme.typography.bodyMedium)
+
+                // Instructions Item
+                item {
+                    Text(text = "Instructions: ${it.instructions}", style = MaterialTheme.typography.bodyMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
-                if (it.ingredient5?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure5} of ${it.ingredient5}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient6?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure6} of ${it.ingredient6}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient7?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure7} of ${it.ingredient7}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient8?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure8} of ${it.ingredient8}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient9?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure9} of ${it.ingredient9}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient10?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure10} of ${it.ingredient10}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient11?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure11} of ${it.ingredient11}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient12?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure12} of ${it.ingredient12}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient13?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure13} of ${it.ingredient13}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient14?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure14} of ${it.ingredient14}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient15?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure15} of ${it.ingredient15}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient16?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure16} of ${it.ingredient16}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient17?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure17} of ${it.ingredient17}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient18?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure18} of ${it.ingredient18}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient19?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure19} of ${it.ingredient19}", style = MaterialTheme.typography.bodyMedium)
-                }
-                if (it.ingredient20?.isNotBlank() == true) {
-                    Text(text = "- ${it.measure20} of ${it.ingredient20}", style = MaterialTheme.typography.bodyMedium)
+
+                // Ingredients Section (with key for jump target)
+                item(key = "ingredients") { // Key for jump target
+                    val customGreen = Color(0xFF008000)
+                    Text(
+                        text = "Ingredients",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = customGreen
+                    )
+                    if (it.ingredient1?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure1} of ${it.ingredient1}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient2?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure2} of ${it.ingredient2}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient3?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure3} of ${it.ingredient3}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient4?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure4} of ${it.ingredient4}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient5?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure5} of ${it.ingredient5}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient6?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure6} of ${it.ingredient6}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient7?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure7} of ${it.ingredient7}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient8?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure8} of ${it.ingredient8}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient9?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure9} of ${it.ingredient9}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient10?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure10} of ${it.ingredient10}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient11?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure11} of ${it.ingredient11}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient12?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure12} of ${it.ingredient12}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient13?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure13} of ${it.ingredient13}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient14?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure14} of ${it.ingredient14}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient15?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure15} of ${it.ingredient15}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient16?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure16} of ${it.ingredient16}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient17?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure17} of ${it.ingredient17}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient18?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure18} of ${it.ingredient18}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient19?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure19} of ${it.ingredient19}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                    if (it.ingredient20?.isNotBlank() == true) {
+                        Text(
+                            text = "- ${it.measure20} of ${it.ingredient20}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
             }
+
+            // LaunchedEffect to observe jumpToIngredients
+            LaunchedEffect(jumpToIngredients.value) {
+                if (jumpToIngredients.value) {
+                    lazyListState.animateScrollToItem(index = 4) // Adjust index if needed
+                    jumpToIngredients.value = false
+                }}
         }
     }
 }
